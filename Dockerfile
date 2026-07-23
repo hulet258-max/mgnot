@@ -2,7 +2,7 @@
 FROM node:18-alpine as build
 
 WORKDIR /app
-v bigger samll
+
 ARG REACT_APP_API_URL
 ARG REACT_APP_SOCKET_URL
 ARG REACT_APP_USE_TEST_TELEGRAM_ID=false
