@@ -52,6 +52,16 @@
         if (tg) {
           tg.ready();
           tg.expand();
+          if (typeof tg.disableVerticalSwipes === "function") {
+            tg.disableVerticalSwipes();
+          }
+          if (
+            typeof tg.requestFullscreen === "function" &&
+            (typeof tg.isVersionAtLeast !== "function" || tg.isVersionAtLeast("8.0")) &&
+            !tg.isFullscreen
+          ) {
+            tg.requestFullscreen();
+          }
           console.log("Telegram WebApp Script initialized.");
           // Apply Telegram theme classes to body
           document.body.classList.add(tg.colorScheme === 'dark' ? 'tg-dark' : 'tg-light');

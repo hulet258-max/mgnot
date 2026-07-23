@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { recordEvent } from "../apiEvents";
 import { socket } from "../socket";
+import { maximizeTelegramWebApp } from "../telegramWebApp";
 
 const UserContext = createContext(null);
 
@@ -86,8 +87,7 @@ export const UserProvider = ({ children }) => {
                 return;
             }
 
-            tg.ready();
-            tg.expand();
+            maximizeTelegramWebApp(tg);
 
             console.log("📱 Telegram WebApp:", tg);
 
