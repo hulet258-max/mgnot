@@ -1,0 +1,10 @@
+node_modules
+build
+.firebase
+.git
+.gitignore
+.env.local
+.env
+src/.env
+*.zip
+npm-debug.log

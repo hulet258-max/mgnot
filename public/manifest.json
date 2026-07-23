@@ -1,0 +1,15 @@
+{
+  "short_name": "mgnot",
+  "name": "mgnot | ምኞት",
+  "icons": [
+    {
+      "src": "brand/mgnot-mark.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#8a5708",
+  "background_color": "#f8f4ed"
+}
