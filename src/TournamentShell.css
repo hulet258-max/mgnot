@@ -53,7 +53,7 @@ button {
   color: var(--wc-text);
   background: linear-gradient(135deg, #081d4b 0%, #103778 58%, #8d1d35 100%);
   font-family: var(--wc-body);
-  font-size: 0.94rem;
+  font-size: 1rem;
 }
 
 .wc-app::before {
@@ -217,6 +217,68 @@ button {
 .wc-lang-menu button:hover {
   border-color: rgba(246, 231, 111, 0.6);
   color: var(--wc-gold);
+}
+
+.language-modal-backdrop {
+  z-index: 320;
+}
+
+.language-modal {
+  position: relative;
+  width: min(390px, calc(100vw - 28px));
+  padding: 24px;
+  border: 1px solid rgba(83, 218, 255, 0.48);
+  border-radius: 16px;
+  background: linear-gradient(150deg, #0b2c68, #081d4b 62%, #57162b);
+  color: var(--wc-text);
+  box-shadow: 0 24px 70px rgba(1, 7, 26, 0.62);
+}
+
+.language-modal h2 {
+  margin: 0 34px 18px 0;
+  font-family: var(--wc-display);
+  font-size: 1.45rem;
+}
+
+.language-modal-options {
+  display: grid;
+  gap: 9px;
+}
+
+.language-modal-options button {
+  display: flex;
+  min-height: 54px;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.language-modal-options button:hover,
+.language-modal-options button.active {
+  border-color: var(--wc-energy-cyan);
+  background: rgba(22, 215, 255, 0.14);
+}
+
+.language-modal-options span {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--wc-red);
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.language-modal-options strong {
+  font-size: 0.96rem;
 }
 
 .wc-avatar-button img {
@@ -499,8 +561,8 @@ button {
   padding: 8px 11px;
   border-radius: 8px;
   border: 1px solid transparent;
-  font-weight: 700;
-  font-size: 0.86rem;
+  font-weight: 800;
+  font-size: 0.94rem;
   background: transparent;
   cursor: pointer;
 }
@@ -536,7 +598,7 @@ button {
 .wc-eyebrow {
   margin: 0 0 6px;
   color: var(--wc-gold);
-  font-size: 0.78rem;
+  font-size: 0.86rem;
   font-weight: 900;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -544,7 +606,7 @@ button {
 
 .wc-page-heading h1 {
   margin: 0;
-  font-size: 1.78rem;
+  font-size: 1.9rem;
   line-height: 1.1;
   font-family: var(--wc-display);
 }
@@ -553,6 +615,7 @@ button {
   max-width: 720px;
   margin: 8px 0 0;
   color: var(--wc-muted);
+  font-weight: 600;
   line-height: 1.55;
 }
 
@@ -699,7 +762,7 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.18);
   background: rgba(255, 255, 255, 0.08);
   color: var(--wc-text);
-  font-size: 0.78rem;
+  font-size: 0.86rem;
   font-weight: 800;
   white-space: nowrap;
 }
@@ -709,6 +772,7 @@ button {
   border: 1px dashed rgba(255, 255, 255, 0.28);
   border-radius: 8px;
   color: var(--wc-muted);
+  font-weight: 600;
   text-align: center;
 }
 
@@ -1006,7 +1070,7 @@ button {
 
   .wc-nav-link {
     padding: 6px 8px;
-    font-size: 0.76rem;
+    font-size: 0.84rem;
   }
 
   .wc-main {
@@ -1019,7 +1083,7 @@ button {
   }
 
   .wc-page-heading h1 {
-    font-size: 1.34rem;
+    font-size: 1.46rem;
   }
 
   .wc-subtitle {
@@ -1053,7 +1117,7 @@ button {
   .wc-button {
     min-height: 31px;
     padding: 6px 8px;
-    font-size: 0.77rem;
+    font-size: 0.85rem;
   }
 
   .wc-page-heading {

@@ -44,6 +44,28 @@ function RaffleCard({ raffle, onOpen, onDraw, formatCurrency, t, now }) {
 }
 
 function NumberPicker({ raffle, numbers, selectedNumber, onSelect, t }) {
+  const [expanded, setExpanded] = useState(false);
+  const [columns, setColumns] = useState(() => {
+    if (window.innerWidth <= 400) return 5;
+    if (window.innerWidth <= 720) return 6;
+    return 10;
+  });
+  const hasMoreRows = numbers.length > columns * 6;
+
+  useEffect(() => {
+    const updateColumns = () => {
+      if (window.innerWidth <= 400) setColumns(5);
+      else if (window.innerWidth <= 720) setColumns(6);
+      else setColumns(10);
+    };
+    window.addEventListener("resize", updateColumns);
+    return () => window.removeEventListener("resize", updateColumns);
+  }, []);
+
+  useEffect(() => {
+    setExpanded(false);
+  }, [raffle.id]);
+
   return (
     <div className="raffle-number-picker">
       <div className="number-legend">
@@ -51,8 +73,11 @@ function NumberPicker({ raffle, numbers, selectedNumber, onSelect, t }) {
         <span><i className="taken" /> {t("raffle.ui.taken", "Taken")}</span>
         <span><i className="selected" /> {t("raffle.ui.selected", "Selected")}</span>
       </div>
-      <div className="number-grid compact">
-        {numbers.map((entry) => <button key={entry.number} type="button" className={`${entry.status} ${selectedNumber === entry.number ? "selected" : ""}`} disabled={entry.status !== "available"} onClick={() => onSelect(entry.number)} aria-label={t("raffle.ui.numberAria", "Number {{number}}, {{status}}", { number: entry.number, status: entry.status })}>{entry.number}</button>)}
+      <div className={`number-grid-shell ${hasMoreRows && !expanded ? "collapsed" : ""}`}>
+        <div className="number-grid compact">
+          {numbers.map((entry) => <button key={entry.number} type="button" className={`${entry.status} ${selectedNumber === entry.number ? "selected" : ""}`} disabled={entry.status !== "available"} onClick={() => onSelect(entry.number)} aria-label={t("raffle.ui.numberAria", "Number {{number}}, {{status}}", { number: entry.number, status: entry.status })}>{entry.number}</button>)}
+        </div>
+        {hasMoreRows && <button className={`number-grid-toggle ${expanded ? "expanded" : ""}`} type="button" onClick={() => setExpanded((value) => !value)} aria-label={expanded ? t("raffle.ui.showFewerNumbers", "Show fewer numbers") : t("raffle.ui.showMoreNumbers", "Show more numbers")} title={expanded ? t("raffle.ui.showFewerNumbers", "Show fewer numbers") : t("raffle.ui.showMoreNumbers", "Show more numbers")}><span aria-hidden="true">⌄</span></button>}
       </div>
       <p className="number-picker-help">{t("raffle.ui.numberHelp", "Choose one number from 1 to {{limit}}. Once saved, the ticket is final.", { limit: raffle.ticketLimit })}</p>
     </div>

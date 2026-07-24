@@ -7,7 +7,7 @@ import { socket } from "./socket";
 import "./TournamentShell.css";
 import "./Raffle.css";
 
-const languageLabels = { en: "ENG", am: "አማ", om: "ORO" };
+const languageLabels = { en: "EN", am: "አማ", om: "OR" };
 
 function TournamentShell({ children, eyebrow, title, subtitle, actions }) {
   const navigate = useNavigate();
@@ -64,14 +64,7 @@ function TournamentShell({ children, eyebrow, title, subtitle, actions }) {
           <span className="wc-brand-copy"><strong>{brandName}</strong><small>{t("raffle.ui.tagline", "Wish it. Get it.")}</small></span>
         </button>
         <div className="wc-topbar-actions">
-          <div className="wc-lang-wrap">
-            <button className="wc-lang-button" type="button" onClick={() => setLanguageOpen((value) => !value)}>{languageLabels[language] || "ENG"}</button>
-            {languageOpen && <div className="wc-lang-menu" role="menu">
-              <button type="button" onClick={() => { setLanguage("en"); setLanguageOpen(false); }}>{t("raffle.ui.english", "English")}</button>
-              <button type="button" onClick={() => { setLanguage("am"); setLanguageOpen(false); }}>{t("raffle.ui.amharic", "Amharic")}</button>
-              <button type="button" onClick={() => { setLanguage("om"); setLanguageOpen(false); }}>{t("raffle.ui.oromifa", "Oromifa")}</button>
-            </div>}
-          </div>
+          <button className="wc-lang-button" type="button" onClick={() => setLanguageOpen(true)} aria-label={t("raffle.ui.chooseLanguage", "Choose language")}>{languageLabels[language] || "አማ"}</button>
           <button className="wc-avatar-button" type="button" onClick={() => setProfileOpen(true)} aria-label={t("raffle.ui.openProfile", "Open profile")}>
             {user?.photo ? <img src={user.photo} alt="" /> : <span>{initials || "U"}</span>}
           </button>
@@ -82,6 +75,19 @@ function TournamentShell({ children, eyebrow, title, subtitle, actions }) {
           <Link className={location.pathname === "/draw" ? "wc-nav-link active" : "wc-nav-link"} to="/draw">{t("raffle.nav.draw", "Draw")}</Link>
         </nav>
       </header>
+
+      {languageOpen && <div className="modal-backdrop language-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="language-modal-title" onClick={() => setLanguageOpen(false)}>
+        <div className="language-modal" onClick={(event) => event.stopPropagation()}>
+          <button className="raffle-modal-close" type="button" onClick={() => setLanguageOpen(false)} aria-label={t("raffle.ui.close", "Close")}>×</button>
+          <p className="wc-eyebrow">{t("raffle.ui.chooseLanguage", "Choose language")}</p>
+          <h2 id="language-modal-title">{t("raffle.ui.chooseLanguage", "Choose language")}</h2>
+          <div className="language-modal-options">
+            <button className={language === "am" ? "active" : ""} type="button" onClick={() => { setLanguage("am"); setLanguageOpen(false); }}><span>አማ</span><strong>{t("raffle.ui.amharic", "Amharic")}</strong></button>
+            <button className={language === "en" ? "active" : ""} type="button" onClick={() => { setLanguage("en"); setLanguageOpen(false); }}><span>EN</span><strong>{t("raffle.ui.english", "English")}</strong></button>
+            <button className={language === "om" ? "active" : ""} type="button" onClick={() => { setLanguage("om"); setLanguageOpen(false); }}><span>OR</span><strong>{t("raffle.ui.oromifa", "Afaan Oromoo")}</strong></button>
+          </div>
+        </div>
+      </div>}
 
       {profileOpen && <div className="modal-backdrop" role="dialog" aria-modal="true" onClick={() => setProfileOpen(false)}>
         <div className="profile-modal raffle-profile" onClick={(event) => event.stopPropagation()}>

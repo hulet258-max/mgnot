@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TournamentShell from "./TournamentShell";
 import { useUser } from "./contexts/UserContext";
@@ -13,6 +13,7 @@ function LeaderboardPage() {
   const [purchases, setPurchases] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const viewedResults = useRef(new Set());
 
   const loadTickets = useCallback(async () => {
     if (!user?.telegramId) return;
@@ -34,6 +35,19 @@ function LeaderboardPage() {
     };
   }, [loadTickets]);
 
+  useEffect(() => {
+    purchases
+      .filter((purchase) => purchase.raffle?.status === "completed" && !purchase.resultViewedAt)
+      .forEach((purchase) => {
+        if (viewedResults.current.has(purchase.raffleId)) return;
+        viewedResults.current.add(purchase.raffleId);
+        fetch(`${API_BASE_URL}/raffles/${purchase.raffleId}/result-viewed`, {
+          method: "POST",
+          headers: telegramHeaders(user)
+        }).catch(() => viewedResults.current.delete(purchase.raffleId));
+      });
+  }, [purchases, user]);
+
   return (
     <TournamentShell>
       {purchases.length > 0 && <section className="tickets-page-heading"><h1>{t("raffle.ui.yourTickets", "Your tickets")}</h1><span>{t("raffle.ui.ticketCount", "{{count}} ticket(s)", { count: purchases.length })}</span></section>}
@@ -44,7 +58,7 @@ function LeaderboardPage() {
         <img src={mediaUrl(purchase.raffle.coverImageUrl)} alt={purchase.raffle.itemName} />
         <div className="ticket-page-item"><span>{t("raffle.ui.item", "Item")}</span><h2>{purchase.raffle.itemName}</h2><small>{t("raffle.ui.ticketPriceValue", "{{price}} ticket", { price: formatCurrency(purchase.raffle.ticketPrice) })}</small></div>
         <div className="ticket-page-number"><span>{t("raffle.ui.ticketNumber", "Ticket number")}</span><strong>{purchase.status === "assigned" ? `#${purchase.ticketNumber}` : t("raffle.ui.notSelected", "Not selected")}</strong></div>
-        <div className="ticket-page-status"><span>{t("raffle.ui.status", "Status")}</span><b className={purchase.status}>{purchase.status === "assigned" ? t("raffle.ui.active", "Active") : t("raffle.ui.chooseNumber", "Choose number")}</b></div>
+        <div className="ticket-page-status"><span>{t("raffle.ui.status", "Status")}</span><b className={purchase.resultStatus || purchase.status}>{purchase.resultStatus === "winner" ? t("raffle.ui.youWon", "Winner") : purchase.resultStatus === "not_winner" ? t("raffle.ui.notWinner", "Not selected as winner") : purchase.status === "assigned" ? t("raffle.ui.active", "Active") : t("raffle.ui.chooseNumber", "Choose number")}</b></div>
         {purchase.status === "pending_number" && <button className="wc-button" type="button" onClick={() => navigate("/")}>{t("raffle.ui.chooseNumber", "Choose number")}</button>}
       </article>)}</div>}
     </TournamentShell>

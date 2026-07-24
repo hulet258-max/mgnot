@@ -21,7 +21,7 @@ export const UserProvider = ({ children }) => {
     const [error, setError] = useState(null);
 
     const API_BASE_URL = process.env.REACT_APP_API_URL;
-    const TEST_TELEGRAM_ID = process.env.REACT_APP_TEST_TELEGRAM_ID || "8573502309";
+    const TEST_TELEGRAM_ID = process.env.REACT_APP_TEST_TELEGRAM_ID || "1303374266";
 
     useEffect(() => {
         const init = async () => {

@@ -72,8 +72,16 @@ beforeEach(() => {
 
 afterEach(() => jest.restoreAllMocks());
 
+const switchToEnglish = () => {
+  const languageButton = screen.getByRole("button", { name: /ቋንቋ ይምረጡ/i });
+  expect(languageButton).toHaveTextContent("አማ");
+  fireEvent.click(languageButton);
+  fireEvent.click(screen.getByRole("button", { name: /እንግሊዝኛ/i }));
+};
+
 test("renders the item raffle home page", async () => {
   render(<App />);
+  switchToEnglish();
   expect(await screen.findByRole("heading", { name: /Demo Smartphone/i })).toBeInTheDocument();
   expect(screen.getAllByRole("button", { name: /^Details$/i })).toHaveLength(4);
   expect(await screen.findByRole("heading", { name: /Previous item winners/i })).toBeInTheDocument();
@@ -87,6 +95,7 @@ test("renders the item raffle home page", async () => {
 
 test("shows Pay only while a number is selected and then opens payment", async () => {
   render(<App />);
+  switchToEnglish();
   const itemButtons = await screen.findAllByRole("button", { name: /^Details$/i });
   fireEvent.click(itemButtons[0]);
 
