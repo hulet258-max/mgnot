@@ -66,6 +66,18 @@ beforeEach(() => {
     if (url.includes("raffle-winners")) {
       return { ok: true, json: async () => ({ success: true, winners: [{ ...raffle, id: "past-phone", status: "completed", winningNumber: 12, winner: { displayName: "Demo Winner", phone: "+251 91 000 0000" } }] }) };
     }
+    if (url.includes("payment-numbers")) {
+      return {
+        ok: true,
+        json: async () => ({
+          success: true,
+          paymentNumbers: [
+            { id: "primary", phone: "+251 91 111 1111", label: "Main account" },
+            { id: "backup", phone: "+251 92 222 2222", label: "Backup account" },
+          ],
+        }),
+      };
+    }
     return { ok: true, json: async () => ({ success: true, raffles: raffleList }) };
   });
 });
@@ -119,6 +131,8 @@ test("shows Pay only while a number is selected and then opens payment", async (
   expect(screen.getByRole("heading", { name: /^Pay with Telebirr$/i })).toBeInTheDocument();
   expect(within(screen.getByRole("dialog")).getAllByText("25 Birr")).toHaveLength(1);
   expect(screen.getByLabelText(/Your phone number/i)).toBeRequired();
-  expect(screen.getByText(/Pay the above amount/i).parentElement).toHaveTextContent("+251 91 000 0000");
+  const paymentDestination = screen.getByText(/Pay the above amount/i).parentElement;
+  expect(paymentDestination).toHaveTextContent("+251 91 111 1111");
+  expect(paymentDestination).toHaveTextContent("+251 92 222 2222");
   expect(screen.queryByRole("heading", { name: /Is this your lucky number/i })).not.toBeInTheDocument();
 });

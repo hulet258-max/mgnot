@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "./contexts/UserContext";
 import { socket } from "./socket";
 import { useLanguage } from "./contexts/LanguageContext";
+import { PaymentNumberList, usePaymentNumbers } from "./PaymentNumbers";
 
 function DepositPage() {
   const navigate = useNavigate();
@@ -15,9 +16,9 @@ function DepositPage() {
   const [confirmPaid, setConfirmPaid] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState(null);
+  const { paymentNumbers, loadingPaymentNumbers } = usePaymentNumbers();
 
   const API_BASE_URL = process.env.REACT_APP_API_URL;
-  const payNumber = "+251-900-000-000";
 
   useEffect(() => {
     if (!screenshotFile) {
@@ -357,8 +358,8 @@ function DepositPage() {
     <div style={styles.page}>
       <div style={styles.card}>
         <h2 style={styles.title}>{t("deposit.title", "Deposit")}</h2>
-        <p style={styles.text}>{t("deposit.payTo", "Pay to this number:")}</p>
-        <p style={styles.payNumber}>{payNumber}</p>
+        <p style={styles.text}>{t("deposit.payTo", "Pay to one of these numbers:")}</p>
+        <PaymentNumberList paymentNumbers={paymentNumbers} loading={loadingPaymentNumbers} />
 
         <form onSubmit={handleSubmit}>
           <fieldset style={styles.formFieldset} disabled={submitting}>

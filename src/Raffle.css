@@ -173,6 +173,11 @@
 .raffle-payment-destination p { margin: 0 0 4px; color: var(--wc-muted); font-size: .76rem; }
 .raffle-payment-destination strong { display: block; color: #fff; font-size: 1.2rem; letter-spacing: .04em; }
 .raffle-payment-destination small { color: #b9d9ed; font-size: .62rem; }
+.customer-payment-numbers { display: grid; gap: 7px; margin-top: 7px; }
+.customer-payment-numbers > div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 8px 10px; border: 1px solid rgba(83,218,255,.3); border-radius: 7px; background: rgba(8,29,75,.58); }
+.customer-payment-numbers strong { display: block; color: #fff; font-size: 1.05rem; letter-spacing: .04em; }
+.customer-payment-numbers small { color: #b9d9ed; font-size: .65rem; text-align: right; }
+.customer-payment-numbers.empty, .customer-payment-numbers.muted { padding: 9px 10px; border: 1px dashed rgba(255,255,255,.25); border-radius: 7px; color: var(--wc-muted); font-size: .72rem; }
 .raffle-phone-field { display: flex; flex-direction: column; gap: 6px; margin: 12px 0; color: #fff; font-size: .72rem; font-weight: 800; }
 .raffle-phone-field textarea { width: 100%; min-height: 42px; padding: 10px 11px; resize: none; border: 1px solid rgba(83,218,255,.65); border-radius: 7px; outline: 0; background: rgba(8,29,75,.72); color: #fff; font: inherit; }
 .raffle-phone-field textarea:focus { border-color: #fff; }

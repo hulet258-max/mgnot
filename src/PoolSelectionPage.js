@@ -5,9 +5,11 @@ import { useUser } from "./contexts/UserContext";
 import { useTournamentState } from "./useTournamentState";
 import { useLanguage } from "./contexts/LanguageContext";
 import { socket } from "./socket";
+import { PaymentNumberList, usePaymentNumbers } from "./PaymentNumbers";
 import "./PredictionPages.css";
 
 function PoolSelectionPage() {
+  const { paymentNumbers, loadingPaymentNumbers } = usePaymentNumbers();
   const navigate = useNavigate();
   const location = useLocation();
   const { selectedPoolId, selectPool } = useTournamentState();
@@ -314,6 +316,7 @@ function PoolSelectionPage() {
                 amount: Number(paymentPool.amount || 0).toLocaleString(),
               })}
             </p>
+            <PaymentNumberList paymentNumbers={paymentNumbers} loading={loadingPaymentNumbers} />
 
             <div className="pool-payment-modes">
               <button
