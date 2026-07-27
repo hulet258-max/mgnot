@@ -4,6 +4,7 @@ import TournamentShell from "./TournamentShell";
 import { useUser } from "./contexts/UserContext";
 import { useLanguage } from "./contexts/LanguageContext";
 import { API_BASE_URL, mediaUrl, readJson, telegramHeaders, userQuery } from "./raffleApi";
+import ResponsiveImage from "./ResponsiveImage";
 import { socket } from "./socket";
 
 function LeaderboardPage() {
@@ -55,7 +56,7 @@ function LeaderboardPage() {
       {!loading && error && <div className="wc-empty">{error}</div>}
       {!loading && !error && purchases.length === 0 && <div className="raffle-empty-state"><img src="/brand/mgnot-mark.png" alt="" /><strong>{t("raffle.ui.emptyTicketsShort", "You have no ticket")}</strong></div>}
       {!loading && !error && purchases.length > 0 && <div className="tickets-page-list">{purchases.map((purchase) => <article className="ticket-page-card" key={`${purchase.raffleId}-${purchase.id}`}>
-        <img src={mediaUrl(purchase.raffle.coverImageUrl)} alt={purchase.raffle.itemName} />
+        <ResponsiveImage path={purchase.raffle.coverImageUrl} alt={purchase.raffle.itemName} sizes="72px" />
         <div className="ticket-page-item"><span>{t("raffle.ui.item", "Item")}</span><h2>{purchase.raffle.itemName}</h2><small>{t("raffle.ui.ticketPriceValue", "{{price}} ticket", { price: formatCurrency(purchase.raffle.ticketPrice) })}</small></div>
         <div className="ticket-page-number"><span>{t("raffle.ui.ticketNumber", "Ticket number")}</span><strong>{purchase.status === "assigned" ? `#${purchase.ticketNumber}` : t("raffle.ui.notSelected", "Not selected")}</strong></div>
         <div className="ticket-page-status"><span>{t("raffle.ui.status", "Status")}</span><b className={purchase.resultStatus || purchase.status}>{purchase.resultStatus === "winner" ? t("raffle.ui.youWon", "Winner") : purchase.resultStatus === "not_winner" ? t("raffle.ui.notWinner", "Not selected as winner") : purchase.status === "assigned" ? t("raffle.ui.active", "Active") : t("raffle.ui.chooseNumber", "Choose number")}</b></div>

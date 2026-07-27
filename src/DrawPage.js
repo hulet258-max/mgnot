@@ -4,6 +4,7 @@ import { useLanguage } from "./contexts/LanguageContext";
 import { useUser } from "./contexts/UserContext";
 import { useRaffles } from "./useRaffles";
 import { API_BASE_URL, mediaUrl, readJson, telegramHeaders, userQuery } from "./raffleApi";
+import ResponsiveImage from "./ResponsiveImage";
 import { socket } from "./socket";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -131,7 +132,7 @@ function DrawPage() {
 
       {raffle && <article className="draw-card">
         <div className="draw-card-heading">
-          <img src={mediaUrl(raffle.coverImageUrl)} alt="" />
+          <ResponsiveImage path={raffle.coverImageUrl} alt="" sizes="96px" priority />
           <div><span>{isComplete ? t("raffle.ui.drawResult", "Draw result") : t("raffle.ui.drawingFor", "Drawing for")}</span><h2>{raffle.itemName}</h2><time dateTime={raffle.drawAt || raffle.drawnAt}>{new Date(raffle.drawAt || raffle.drawnAt).toLocaleString()}</time></div>
           <div className={`draw-card-countdown ${isFinalTenSeconds ? "final-ten" : ""}`}>
             <span>{isComplete ? t("raffle.ui.completed", "Completed") : isMixing ? t("raffle.ui.drawingIn", "Drawing in") : t("raffle.ui.startsIn", "Starts in")}</span>

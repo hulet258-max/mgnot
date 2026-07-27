@@ -13,6 +13,15 @@ export function mediaUrl(path) {
   return origin ? `${origin}${normalized}` : normalized;
 }
 
+/** Build width variants for newly optimized uploads; legacy/external paths stay unchanged. */
+export function mediaSrcSet(path) {
+  const resolved = mediaUrl(path);
+  if (!/-1280\.webp(?:$|[?#])/i.test(resolved)) return undefined;
+  return [320, 768, 1280]
+    .map((width) => `${resolved.replace(/-1280\.webp(?=$|[?#])/i, `-${width}.webp`)} ${width}w`)
+    .join(", ");
+}
+
 export function telegramHeaders(user, withJson = false) {
   const headers = {};
   const initData = window.Telegram?.WebApp?.initData;

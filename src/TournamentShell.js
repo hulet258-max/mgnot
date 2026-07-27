@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useUser } from "./contexts/UserContext";
 import { useLanguage } from "./contexts/LanguageContext";
 import { API_BASE_URL, mediaUrl, readJson, telegramHeaders, userQuery } from "./raffleApi";
+import ResponsiveImage from "./ResponsiveImage";
 import { socket } from "./socket";
 import "./TournamentShell.css";
 import "./Raffle.css";
@@ -104,7 +105,7 @@ function TournamentShell({ children, eyebrow, title, subtitle, actions }) {
             {profileLoading && <div className="wc-empty">{t("raffle.ui.loadingTickets", "Loading tickets...")}</div>}
             {!profileLoading && !purchases.length && <div className="wc-empty">{t("raffle.ui.noProfileTickets", "You have not bought a raffle ticket yet.")}</div>}
             {purchases.map((purchase) => <div className="raffle-profile-ticket" key={`${purchase.raffleId}-${purchase.id}`}>
-              <img src={mediaUrl(purchase.raffle.coverImageUrl)} alt="" />
+              <ResponsiveImage path={purchase.raffle.coverImageUrl} alt="" sizes="54px" />
               <div><strong>{purchase.raffle.itemName}</strong><span>{purchase.status === "assigned" ? t("raffle.ui.ticketAssigned", "Ticket #{{number}}", { number: purchase.ticketNumber }) : t("raffle.ui.paymentPending", "Payment confirmed — number pending")}</span></div>
               <b>{formatCurrency(purchase.raffle.ticketPrice)}</b>
             </div>)}

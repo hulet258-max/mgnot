@@ -6,6 +6,7 @@ import { useUser } from "./contexts/UserContext";
 import { useLanguage } from "./contexts/LanguageContext";
 import { useRaffles } from "./useRaffles";
 import { API_BASE_URL, mediaUrl, readJson, telegramHeaders, userQuery } from "./raffleApi";
+import ResponsiveImage from "./ResponsiveImage";
 import { socket } from "./socket";
 
 function maskPhoneLastTwoDigits(value) {
@@ -27,7 +28,7 @@ function RaffleCard({ raffle, onOpen, onDraw, formatCurrency, t, now }) {
   return (
     <article className="raffle-card">
       <button className="raffle-card-open" type="button" onClick={handleOpen}>
-        <div className="raffle-card-image"><img src={mediaUrl(raffle.coverImageUrl)} alt={raffle.itemName} /><span className={`raffle-card-draw-status ${isOnDraw ? "drawing" : ""}`}>{isOnDraw ? t("raffle.ui.onDraw", "On draw") : t("raffle.ui.open", "Open")}</span></div>
+        <div className="raffle-card-image"><ResponsiveImage path={raffle.coverImageUrl} alt={raffle.itemName} sizes="(max-width: 720px) 50vw, 25vw" /><span className={`raffle-card-draw-status ${isOnDraw ? "drawing" : ""}`}>{isOnDraw ? t("raffle.ui.onDraw", "On draw") : t("raffle.ui.open", "Open")}</span></div>
         <div className="raffle-card-body">
           <h2>{raffle.itemName}</h2>
           <strong className="raffle-card-ticket-price">{formatCurrency(raffle.ticketPrice)}</strong>
@@ -310,7 +311,7 @@ function MainPage() {
         {openRaffles.length > 4 && <div className="see-more-items"><button className="wc-button secondary" type="button" onClick={() => setShowAllItems((value) => !value)}>{showAllItems ? t("raffle.ui.showLess", "Show less") : t("raffle.ui.seeMore", "See more ({{count}})", { count: openRaffles.length - 4 })}</button></div>}
         <section className="home-winners-section">
           <div className="home-section-header"><div className="home-section-title"><span className="section-icon" aria-hidden="true">★</span><div><h2>{t("raffle.ui.previousWinners", "Previous item winners")}</h2></div></div></div>
-          <div className="compact-winner-list">{previousWinners.map((raffle, index) => <article className={`compact-winner pool-color-${index % 3}`} key={raffle.id}><img src={mediaUrl(raffle.coverImageUrl)} alt="" /><div className="compact-winner-item"><span>{t("raffle.ui.item", "Item")}</span><strong>{raffle.itemName}</strong></div><div><span>{t("raffle.ui.winner", "Winner")}</span><strong>{raffle.winner?.displayName || t("raffle.ui.winner", "Winner")}</strong></div><div><span>{t("raffle.ui.winningNumber", "Winning number")}</span><strong>#{raffle.winningNumber}</strong></div><div><span>{t("raffle.ui.phone", "Phone")}</span><strong>{maskPhoneLastTwoDigits(raffle.winner?.phone)}</strong></div></article>)}</div>
+          <div className="compact-winner-list">{previousWinners.map((raffle, index) => <article className={`compact-winner pool-color-${index % 3}`} key={raffle.id}><ResponsiveImage path={raffle.coverImageUrl} alt="" sizes="48px" /><div className="compact-winner-item"><span>{t("raffle.ui.item", "Item")}</span><strong>{raffle.itemName}</strong></div><div><span>{t("raffle.ui.winner", "Winner")}</span><strong>{raffle.winner?.displayName || t("raffle.ui.winner", "Winner")}</strong></div><div><span>{t("raffle.ui.winningNumber", "Winning number")}</span><strong>#{raffle.winningNumber}</strong></div><div><span>{t("raffle.ui.phone", "Phone")}</span><strong>{maskPhoneLastTwoDigits(raffle.winner?.phone)}</strong></div></article>)}</div>
         </section>
       </>}
 
