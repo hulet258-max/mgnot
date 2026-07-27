@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import TournamentShell from "./TournamentShell";
@@ -7,8 +7,6 @@ import { useLanguage } from "./contexts/LanguageContext";
 import { useRaffles } from "./useRaffles";
 import { API_BASE_URL, mediaUrl, readJson, telegramHeaders, userQuery } from "./raffleApi";
 import { socket } from "./socket";
-
-const NUMBER_ROWS_PER_PAGE = 6;
 
 function maskPhoneLastTwoDigits(value) {
   if (!value) return "—";
@@ -46,14 +44,19 @@ function RaffleCard({ raffle, onOpen, onDraw, formatCurrency, t, now }) {
 }
 
 function NumberPicker({ raffle, numbers, selectedNumber, onSelect, t }) {
-  const [visibleRows, setVisibleRows] = useState(NUMBER_ROWS_PER_PAGE);
+  const numberGridRef = useRef(null);
+  const [hasMoreBelow, setHasMoreBelow] = useState(false);
   const [columns, setColumns] = useState(() => {
     if (window.innerWidth <= 400) return 5;
     if (window.innerWidth <= 720) return 6;
     return 10;
   });
-  const visibleNumbers = numbers.slice(0, columns * visibleRows);
-  const hasMoreRows = visibleNumbers.length < numbers.length;
+  const hasMoreRows = numbers.length > columns * 6;
+  const updateMoreBelow = useCallback(() => {
+    const grid = numberGridRef.current;
+    if (!grid) return;
+    setHasMoreBelow(grid.scrollTop + grid.clientHeight < grid.scrollHeight - 2);
+  }, []);
 
   useEffect(() => {
     const updateColumns = () => {
@@ -66,8 +69,21 @@ function NumberPicker({ raffle, numbers, selectedNumber, onSelect, t }) {
   }, []);
 
   useEffect(() => {
-    setVisibleRows(NUMBER_ROWS_PER_PAGE);
-  }, [raffle.id]);
+    const grid = numberGridRef.current;
+    if (!grid) return;
+    grid.scrollTop = 0;
+    updateMoreBelow();
+  }, [raffle.id, columns, updateMoreBelow]);
+
+  useEffect(() => {
+    updateMoreBelow();
+  }, [numbers.length, columns, updateMoreBelow]);
+
+  const showNextRows = () => {
+    const grid = numberGridRef.current;
+    if (!grid) return;
+    grid.scrollBy({ top: grid.clientHeight, behavior: "smooth" });
+  };
 
   return (
     <div className="raffle-number-picker">
@@ -76,11 +92,11 @@ function NumberPicker({ raffle, numbers, selectedNumber, onSelect, t }) {
         <span><i className="taken" /> {t("raffle.ui.taken", "Taken")}</span>
         <span><i className="selected" /> {t("raffle.ui.selected", "Selected")}</span>
       </div>
-      <div className={`number-grid-shell ${hasMoreRows ? "has-more" : ""}`}>
-        <div className="number-grid compact">
-          {visibleNumbers.map((entry) => <button key={entry.number} type="button" className={`${entry.status} ${selectedNumber === entry.number ? "selected" : ""}`} disabled={entry.status !== "available"} onClick={() => onSelect(entry.number)} aria-label={t("raffle.ui.numberAria", "Number {{number}}, {{status}}", { number: entry.number, status: entry.status })}>{entry.number}</button>)}
+      <div className={`number-grid-shell ${hasMoreBelow ? "has-more" : ""}`}>
+        <div className={`number-grid compact ${hasMoreRows ? "scrollable" : ""}`} ref={numberGridRef} onScroll={updateMoreBelow}>
+          {numbers.map((entry) => <button key={entry.number} type="button" className={`${entry.status} ${selectedNumber === entry.number ? "selected" : ""}`} disabled={entry.status !== "available"} onClick={() => onSelect(entry.number)} aria-label={t("raffle.ui.numberAria", "Number {{number}}, {{status}}", { number: entry.number, status: entry.status })}>{entry.number}</button>)}
         </div>
-        {hasMoreRows && <button className="number-grid-toggle" type="button" onClick={() => setVisibleRows((rows) => rows + NUMBER_ROWS_PER_PAGE)} aria-label={t("raffle.ui.showMoreNumbers", "Show more numbers")} title={t("raffle.ui.showMoreNumbers", "Show more numbers")}><span aria-hidden="true">⌄</span></button>}
+        {hasMoreBelow && <button className="number-grid-toggle" type="button" onClick={showNextRows} aria-label={t("raffle.ui.showMoreNumbers", "Show more numbers")} title={t("raffle.ui.showMoreNumbers", "Show more numbers")}><span aria-hidden="true">⌄</span></button>}
       </div>
       <p className="number-picker-help">{t("raffle.ui.numberHelp", "Choose one number from 1 to {{limit}}. Once saved, the ticket is final.", { limit: raffle.ticketLimit })}</p>
     </div>
