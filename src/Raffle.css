@@ -1,8 +1,8 @@
 .raffle-app .wc-topbar { position: fixed; top: 0; right: 0; left: 0; flex-wrap: wrap; background: linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(135deg, #081d4b 0%, #103778 58%, #8d1d35 100%); background-size: 64px 64px, 64px 64px, auto; border-bottom: 1px solid rgba(88,185,255,.5); box-shadow: 0 12px 25px rgba(2,10,34,.45); backdrop-filter: none; }
 .raffle-app .wc-nav { position: static; z-index: auto; order: 3; width: calc(100% + 28px); margin: 4px -14px -10px; gap: 7px; padding: 7px 14px; background: rgba(3,18,55,.48); border: 0; border-top: 1px solid rgba(255,255,255,.08); box-shadow: inset 0 1px 8px rgba(1,8,28,.2); backdrop-filter: none; }
 .raffle-app .wc-main { padding-top: 144px; }
-.raffle-app .wc-brand { gap: 8px; transform: translateY(8px); }
-.raffle-app .wc-topbar-actions { transform: translateY(8px); }
+.raffle-app .wc-brand { gap: 8px; transform: translateY(12px); }
+.raffle-app .wc-topbar-actions { transform: translateY(12px); }
 .raffle-app .wc-brand-mark { width: 58px; height: 58px; flex: 0 0 58px; overflow: hidden; margin-right: 2px; padding: 0; border: 2px solid #fff; border-radius: 50%; background: #c32242; box-shadow: 0 5px 14px rgba(1,9,30,.34); }
 .raffle-app .wc-brand strong { font-size: 1.75rem; letter-spacing: .02em; }
 .raffle-app .wc-brand-copy { display: flex; flex-direction: column; justify-content: center; }
