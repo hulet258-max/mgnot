@@ -1,5 +1,5 @@
 .raffle-app .wc-topbar { position: fixed; top: 0; right: 0; left: 0; flex-wrap: wrap; background: linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(135deg, #081d4b 0%, #103778 58%, #8d1d35 100%); background-size: 64px 64px, 64px 64px, auto; border-bottom: 1px solid rgba(88,185,255,.5); box-shadow: 0 12px 25px rgba(2,10,34,.45); backdrop-filter: none; }
-.raffle-app .wc-nav { position: static; z-index: auto; order: 3; width: 100%; gap: 7px; padding: 4px 0 0; background: transparent; border: 0; box-shadow: none; backdrop-filter: none; }
+.raffle-app .wc-nav { position: static; z-index: auto; order: 3; width: calc(100% + 28px); margin: 4px -14px -10px; gap: 7px; padding: 7px 14px; background: rgba(3,18,55,.48); border: 0; border-top: 1px solid rgba(255,255,255,.08); box-shadow: inset 0 1px 8px rgba(1,8,28,.2); backdrop-filter: none; }
 .raffle-app .wc-main { padding-top: 144px; }
 .raffle-app .wc-brand { gap: 8px; transform: translateY(8px); }
 .raffle-app .wc-topbar-actions { transform: translateY(8px); }
@@ -24,7 +24,7 @@
 
 /* Item cards intentionally reuse the compact World Cup pool-card rhythm. */
 .raffle-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 9px; margin-top: 4px; }
-.raffle-card { display: flex; min-width: 0; min-height: 218px; flex-direction: column; overflow: hidden; border: 1px solid rgba(103,202,255,.62); border-radius: 9px; background: linear-gradient(155deg, rgba(4,18,51,.96) 0%, rgba(7,45,91,.88) 56%, rgba(9,75,125,.78) 100%); box-shadow: 0 9px 20px rgba(1,8,28,.44), inset 0 1px 0 rgba(255,255,255,.22), inset 0 -18px 36px rgba(18,113,174,.11); backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2); }
+.raffle-card { display: flex; min-width: 0; min-height: 226px; flex-direction: column; overflow: hidden; border: 1px solid rgba(103,202,255,.62); border-radius: 9px; background: linear-gradient(155deg, rgba(4,18,51,.96) 0%, rgba(7,45,91,.88) 56%, rgba(9,75,125,.78) 100%); box-shadow: 0 9px 20px rgba(1,8,28,.44), inset 0 1px 0 rgba(255,255,255,.22), inset 0 -18px 36px rgba(18,113,174,.11); backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2); }
 .raffle-card-open { display: flex; width: 100%; flex: 1 1 auto; flex-direction: column; padding: 0; border: 0; background: transparent; color: #fff; text-align: left; cursor: pointer; }
 .raffle-card-topline { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 9px 6px; }
 .raffle-card-topline span { padding: 4px 7px; border: 1px solid rgba(255,255,255,.36); border-radius: 999px; background: #4ff5b0; color: #073c49; font-size: .63rem; font-weight: 900; }
@@ -40,10 +40,10 @@
 .raffle-status { display: inline-flex; align-items: center; min-height: 24px; padding: 4px 8px; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; background: rgba(23, 78, 166, .9); color: #fff; font-size: .68rem; font-weight: 900; text-transform: uppercase; }
 .raffle-status.sold_out, .raffle-status.completed { background: rgba(195, 34, 66, .92); }
 .raffle-card-image .raffle-status { position: absolute; z-index: 2; top: 8px; left: 8px; }
-.raffle-card-body { display: flex; flex: 1 1 auto; flex-direction: column; margin-top: -1px; padding: 6px 8px 5px; background: linear-gradient(180deg, rgba(5,31,72,.92), rgba(7,55,105,.35)); }
-.raffle-card-body h2 { overflow: hidden; min-width: 0; margin: 0 0 2px; color: #fff; font-family: var(--wc-display); font-size: .9rem; font-weight: 900; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
-.raffle-card-ticket-price { display: block; flex: 0 0 auto; margin: 0 0 5px; color: #ffc83d; font-size: 1.1rem; font-weight: 900; line-height: 1.15; }
-.raffle-card-draw-date { display: block; overflow: hidden; margin: -1px 0 6px; color: #b9d9ed; font-size: .64rem; font-weight: 600; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
+.raffle-card-body { display: flex; flex: 1 1 auto; flex-direction: column; margin-top: -1px; padding: 9px 9px 6px; background: linear-gradient(180deg, rgba(5,31,72,.92), rgba(7,55,105,.35)); }
+.raffle-card-body h2 { overflow: hidden; min-width: 0; margin: 0 0 3px; color: #fff; font-family: var(--wc-display); font-size: 1rem; font-weight: 900; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
+.raffle-card-ticket-price { display: block; flex: 0 0 auto; margin: 0 0 5px; color: #ffc83d; font-size: 1.2rem; font-weight: 900; line-height: 1.15; }
+.raffle-card-draw-date { display: block; overflow: hidden; margin: -1px 0 6px; color: #b9d9ed; font-size: .72rem; font-weight: 600; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
 .raffle-card-body p { min-height: 34px; margin: 0 0 8px; color: var(--wc-muted); font-size: .75rem; line-height: 1.42; }
 .raffle-card-price, .raffle-progress-label { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .raffle-card-price { margin: 5px 0 7px; }
@@ -52,12 +52,12 @@
 .raffle-card-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; gap: 8px; margin-top: auto; }
 .raffle-card-stats div { display: flex; align-items: center; justify-content: space-between; gap: 4px; min-width: 0; padding: 0 8px 0 0; border: 0; border-right: 1px solid rgba(255,255,255,.2); background: transparent; }
 .raffle-card-stats div:last-child { padding-right: 0; border-right: 0; }
-.raffle-card-stats span { color: #b9d9ed; font-size: .68rem; font-weight: 600; }
-.raffle-card-stats strong { color: #54f0b4; font-size: .86rem; font-weight: 900; }
+.raffle-card-stats span { color: #b9d9ed; font-size: .75rem; font-weight: 600; }
+.raffle-card-stats strong { color: #54f0b4; font-size: .96rem; font-weight: 900; }
 .raffle-card-stats div:nth-child(2) strong { color: #ff9b55; }
 .raffle-progress-label { margin-bottom: 5px; }
 .raffle-progress-label b { color: var(--wc-energy-cyan); }
-.raffle-card-cta { width: calc(100% - 12px); min-height: 29px; margin: auto 6px 6px; padding: 5px 8px; border: 1px solid rgba(133,224,255,.72); background: linear-gradient(135deg, rgba(30,167,218,.88), rgba(37,99,184,.86)); color: #fff; box-shadow: 0 4px 10px rgba(1,12,38,.4), inset 0 1px 0 rgba(255,255,255,.2); font-size: .76rem; font-weight: 900; backdrop-filter: blur(8px); }
+.raffle-card-cta { width: calc(100% - 12px); min-height: 31px; margin: auto 6px 6px; padding: 5px 8px; border: 1px solid rgba(133,224,255,.72); background: linear-gradient(135deg, rgba(30,167,218,.88), rgba(37,99,184,.86)); color: #fff; box-shadow: 0 4px 10px rgba(1,12,38,.4), inset 0 1px 0 rgba(255,255,255,.2); font-size: .84rem; font-weight: 900; backdrop-filter: blur(8px); }
 .raffle-card-cta:hover { border-color: #fff; filter: brightness(1.08); transform: translateY(-1px); }
 .see-more-items { display: flex; justify-content: center; margin-top: 12px; }
 .see-more-items .wc-button { min-width: 150px; border-color: rgba(255,255,255,.34); }
@@ -213,14 +213,13 @@
 .number-grid > .yours, .number-grid > .selected { border: 2px solid #fff; background: var(--wc-red); color: #fff; font-size: .86rem; }
 .number-grid button.available { cursor: pointer; }
 .number-grid button.available:hover { border-color: #fff; background: #187fc1; transform: translateY(-1px); }
-.number-grid-shell { position: relative; padding-bottom: 18px; }
+.number-grid-shell { position: relative; }
 .number-grid.compact { padding: 3px; grid-template-columns: repeat(10, 1fr); grid-auto-rows: 36px; }
-.number-grid-shell.collapsed .number-grid.compact { max-height: 252px; overflow: hidden; }
-.number-grid-shell.collapsed::after { content: ""; position: absolute; z-index: 2; right: 0; bottom: 18px; left: 0; height: 82px; pointer-events: none; background: linear-gradient(180deg, rgba(11,37,88,0), rgba(11,37,88,.88) 72%, #0b2558); }
-.number-grid-toggle { position: absolute; z-index: 3; bottom: 0; left: 50%; display: grid; width: 28px; height: 28px; place-items: center; padding: 0; border: 1px solid rgba(133,224,255,.85); border-radius: 50%; background: linear-gradient(145deg, #1aa8da, #255fae); color: #fff; box-shadow: 0 5px 12px rgba(1,12,38,.45); cursor: pointer; transform: translateX(-50%); }
-.number-grid-toggle span { display: block; font-size: 1.2rem; font-weight: 900; line-height: .7; transform: translateY(-2px); }
-.number-grid-toggle.expanded span { transform: translateY(2px) rotate(180deg); }
-.number-grid-toggle:hover { border-color: #fff; filter: brightness(1.08); }
+.number-grid-shell.has-more { padding-bottom: 25px; }
+.number-grid-shell.has-more::after { content: ""; position: absolute; z-index: 2; right: 0; bottom: 20px; left: 0; height: 42px; pointer-events: none; background: linear-gradient(180deg, rgba(11,37,88,0), rgba(11,37,88,.8)); }
+.number-grid-toggle { position: absolute; z-index: 3; bottom: 0; left: 50%; display: grid; width: 36px; height: 24px; place-items: center; padding: 0; border: 0; background: transparent; color: #8be5ff; cursor: pointer; transform: translateX(-50%); }
+.number-grid-toggle span { display: block; font-size: 1.65rem; font-weight: 900; line-height: .7; transform: translateY(-2px); }
+.number-grid-toggle:hover { color: #fff; transform: translateX(-50%) translateY(1px); }
 .number-picker-help { margin: 9px 0 0; color: var(--wc-muted); font-size: .72rem; }
 
 .number-item-selector { margin-bottom: 14px; }
@@ -363,18 +362,18 @@
 
 @media (max-width: 720px) {
   .raffle-app .wc-topbar { min-height: 0; }
-  .raffle-app .wc-nav { padding: 4px 0 0; }
+  .raffle-app .wc-nav { padding: 7px 14px; }
   .raffle-app .wc-main { padding-top: calc(165px + env(safe-area-inset-top)); }
   .raffle-app .wc-brand-mark { width: 54px; height: 54px; flex-basis: 54px; margin-right: 1px; }
   .raffle-app .wc-brand strong { font-size: 1.4rem; }
   .raffle-app .wc-brand-copy small { font-size: .58rem; }
   .raffle-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-  .raffle-card { min-height: 196px; }
+  .raffle-card { min-height: 207px; }
   .raffle-card-image { height: 90px; flex-basis: 90px; }
-  .raffle-card-body { padding: 8px 7px 6px; }
-  .raffle-card-body h2 { font-size: .85rem; }
+  .raffle-card-body { padding: 10px 8px 6px; }
+  .raffle-card-body h2 { font-size: .94rem; }
   .raffle-card-body p { min-height: 44px; font-size: .66rem; }
-  .raffle-card-ticket-price { font-size: .96rem; }
+  .raffle-card-ticket-price { font-size: 1.06rem; }
   .raffle-card-stats { gap: 5px; }
   .raffle-card-stats div { align-items: flex-start; flex-direction: column; gap: 0; }
   .raffle-card-cta { width: calc(100% - 12px); margin: auto 6px 6px; }

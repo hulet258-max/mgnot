@@ -8,6 +8,8 @@ import { useRaffles } from "./useRaffles";
 import { API_BASE_URL, mediaUrl, readJson, telegramHeaders, userQuery } from "./raffleApi";
 import { socket } from "./socket";
 
+const NUMBER_ROWS_PER_PAGE = 6;
+
 function maskPhoneLastTwoDigits(value) {
   if (!value) return "—";
   const characters = String(value).split("");
@@ -44,13 +46,14 @@ function RaffleCard({ raffle, onOpen, onDraw, formatCurrency, t, now }) {
 }
 
 function NumberPicker({ raffle, numbers, selectedNumber, onSelect, t }) {
-  const [expanded, setExpanded] = useState(false);
+  const [visibleRows, setVisibleRows] = useState(NUMBER_ROWS_PER_PAGE);
   const [columns, setColumns] = useState(() => {
     if (window.innerWidth <= 400) return 5;
     if (window.innerWidth <= 720) return 6;
     return 10;
   });
-  const hasMoreRows = numbers.length > columns * 6;
+  const visibleNumbers = numbers.slice(0, columns * visibleRows);
+  const hasMoreRows = visibleNumbers.length < numbers.length;
 
   useEffect(() => {
     const updateColumns = () => {
@@ -63,7 +66,7 @@ function NumberPicker({ raffle, numbers, selectedNumber, onSelect, t }) {
   }, []);
 
   useEffect(() => {
-    setExpanded(false);
+    setVisibleRows(NUMBER_ROWS_PER_PAGE);
   }, [raffle.id]);
 
   return (
@@ -73,11 +76,11 @@ function NumberPicker({ raffle, numbers, selectedNumber, onSelect, t }) {
         <span><i className="taken" /> {t("raffle.ui.taken", "Taken")}</span>
         <span><i className="selected" /> {t("raffle.ui.selected", "Selected")}</span>
       </div>
-      <div className={`number-grid-shell ${hasMoreRows && !expanded ? "collapsed" : ""}`}>
+      <div className={`number-grid-shell ${hasMoreRows ? "has-more" : ""}`}>
         <div className="number-grid compact">
-          {numbers.map((entry) => <button key={entry.number} type="button" className={`${entry.status} ${selectedNumber === entry.number ? "selected" : ""}`} disabled={entry.status !== "available"} onClick={() => onSelect(entry.number)} aria-label={t("raffle.ui.numberAria", "Number {{number}}, {{status}}", { number: entry.number, status: entry.status })}>{entry.number}</button>)}
+          {visibleNumbers.map((entry) => <button key={entry.number} type="button" className={`${entry.status} ${selectedNumber === entry.number ? "selected" : ""}`} disabled={entry.status !== "available"} onClick={() => onSelect(entry.number)} aria-label={t("raffle.ui.numberAria", "Number {{number}}, {{status}}", { number: entry.number, status: entry.status })}>{entry.number}</button>)}
         </div>
-        {hasMoreRows && <button className={`number-grid-toggle ${expanded ? "expanded" : ""}`} type="button" onClick={() => setExpanded((value) => !value)} aria-label={expanded ? t("raffle.ui.showFewerNumbers", "Show fewer numbers") : t("raffle.ui.showMoreNumbers", "Show more numbers")} title={expanded ? t("raffle.ui.showFewerNumbers", "Show fewer numbers") : t("raffle.ui.showMoreNumbers", "Show more numbers")}><span aria-hidden="true">⌄</span></button>}
+        {hasMoreRows && <button className="number-grid-toggle" type="button" onClick={() => setVisibleRows((rows) => rows + NUMBER_ROWS_PER_PAGE)} aria-label={t("raffle.ui.showMoreNumbers", "Show more numbers")} title={t("raffle.ui.showMoreNumbers", "Show more numbers")}><span aria-hidden="true">⌄</span></button>}
       </div>
       <p className="number-picker-help">{t("raffle.ui.numberHelp", "Choose one number from 1 to {{limit}}. Once saved, the ticket is final.", { limit: raffle.ticketLimit })}</p>
     </div>
