@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import { recordEvent } from "../apiEvents";
 import { socket } from "../socket";
 import { maximizeTelegramWebApp } from "../telegramWebApp";
@@ -216,8 +216,13 @@ export const UserProvider = ({ children }) => {
         };
     }, [telegramId]);
 
+    const updateUser = useCallback((changes) => {
+        setUser((current) => current ? { ...current, ...changes } : current);
+    }, []);
+
     const value = {
         user,
+        updateUser,
         telegramId,     // 🔥 MAIN THING YOU NEED
         telegramUser,   // optional
         loading,

@@ -410,6 +410,58 @@ button {
   font-size: 1.05rem;
 }
 
+.profile-phone-form {
+  display: grid;
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.profile-phone-form label {
+  color: var(--wc-muted);
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.profile-phone-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.profile-phone-row input {
+  min-width: 0;
+  padding: 10px 11px;
+  border: 1px solid rgba(83, 218, 255, 0.65);
+  border-radius: 7px;
+  outline: 0;
+  background: rgba(8, 29, 75, 0.72);
+  color: #fff;
+  font: inherit;
+}
+
+.profile-phone-row input:focus {
+  border-color: #fff;
+}
+
+.profile-phone-row .wc-button {
+  padding: 9px 14px;
+}
+
+.profile-phone-success,
+.profile-phone-error {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.profile-phone-success {
+  color: #8ff0be;
+}
+
+.profile-phone-error {
+  color: #ffb6b6;
+}
+
 .profile-balance {
   margin-top: 16px;
   padding: 14px;
@@ -526,6 +578,10 @@ button {
   .profile-stat-grid,
   .profile-pool-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .profile-phone-row {
+    grid-template-columns: 1fr;
   }
 }
 

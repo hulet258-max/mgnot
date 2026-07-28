@@ -52,8 +52,12 @@ const raffleList = [
 ];
 
 beforeEach(() => {
-  global.fetch = jest.fn(async (input) => {
+  global.fetch = jest.fn(async (input, options = {}) => {
     const url = String(input);
+    if (url.includes("telegram-user/phone")) {
+      const body = JSON.parse(options.body);
+      return { ok: true, json: async () => ({ success: true, phone: body.phone }) };
+    }
     if (url.includes("telegram-user")) {
       return { ok: true, json: async () => ({ success: true, user: { firstName: "Demo", username: "demo" } }) };
     }
@@ -135,4 +139,24 @@ test("shows Pay only while a number is selected and then opens payment", async (
   expect(paymentDestination).toHaveTextContent("+251 91 111 1111");
   expect(paymentDestination).toHaveTextContent("+251 92 222 2222");
   expect(screen.queryByRole("heading", { name: /Is this your lucky number/i })).not.toBeInTheDocument();
+});
+
+test("lets a user add a phone number from their profile", async () => {
+  render(<App />);
+  switchToEnglish();
+  await screen.findByRole("heading", { name: /Demo Smartphone/i });
+
+  fireEvent.click(screen.getByRole("button", { name: /Open profile/i }));
+  const phoneInput = screen.getByLabelText(/Your phone number/i);
+  fireEvent.change(phoneInput, { target: { value: "+251 91 234 5678" } });
+  fireEvent.click(screen.getByRole("button", { name: /Save phone/i }));
+
+  expect(await screen.findByText(/Phone number saved/i)).toBeInTheDocument();
+  expect(global.fetch).toHaveBeenCalledWith(
+    expect.stringContaining("/telegram-user/phone"),
+    expect.objectContaining({
+      method: "PUT",
+      body: expect.stringContaining("+251 91 234 5678"),
+    })
+  );
 });

@@ -13,12 +13,16 @@ const languageLabels = { en: "EN", am: "አማ", om: "OR" };
 function TournamentShell({ children, eyebrow, title, subtitle, actions }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, loading, error } = useUser();
+  const { user, updateUser, loading, error } = useUser();
   const { language, setLanguage, t, formatCurrency } = useLanguage();
   const [profileOpen, setProfileOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [purchases, setPurchases] = useState([]);
   const [profileLoading, setProfileLoading] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [phoneSaving, setPhoneSaving] = useState(false);
+  const [phoneMessage, setPhoneMessage] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const displayName = user?.firstName
     ? `${user.firstName} ${user.lastName || ""}`.trim()
     : user?.username || t("raffle.ui.telegramUser", "Telegram user");
@@ -26,6 +30,45 @@ function TournamentShell({ children, eyebrow, title, subtitle, actions }) {
     () => displayName.split(" ").filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase(),
     [displayName]
   );
+
+  const openProfile = () => {
+    setPhone(user?.phone || user?.phoneNumber || "");
+    setPhoneMessage("");
+    setPhoneError("");
+    setProfileOpen(true);
+  };
+
+  const savePhone = async (event) => {
+    event.preventDefault();
+    const cleanedPhone = phone.trim();
+    const digitCount = cleanedPhone.replace(/\D/g, "").length;
+    if (!/^\+?[\d\s-]+$/.test(cleanedPhone) || digitCount < 9 || digitCount > 15) {
+      setPhoneMessage("");
+      setPhoneError(t("raffle.ui.phoneRequired", "Enter a valid phone number before continuing."));
+      return;
+    }
+
+    setPhoneSaving(true);
+    setPhoneMessage("");
+    setPhoneError("");
+    try {
+      const data = await readJson(
+        await fetch(`${API_BASE_URL}/telegram-user/phone`, {
+          method: "PUT",
+          headers: telegramHeaders(user, true),
+          body: JSON.stringify({ telegramId: user?.telegramId, phone: cleanedPhone }),
+        }),
+        t("raffle.ui.phoneSaveFailed", "Could not save your phone number.")
+      );
+      setPhone(data.phone);
+      updateUser({ phone: data.phone });
+      setPhoneMessage(t("raffle.ui.phoneSaved", "Phone number saved."));
+    } catch (saveError) {
+      setPhoneError(saveError.message);
+    } finally {
+      setPhoneSaving(false);
+    }
+  };
 
   useEffect(() => {
     if (!user?.telegramId) return undefined;
@@ -66,7 +109,7 @@ function TournamentShell({ children, eyebrow, title, subtitle, actions }) {
         </button>
         <div className="wc-topbar-actions">
           <button className="wc-lang-button" type="button" onClick={() => setLanguageOpen(true)} aria-label={t("raffle.ui.chooseLanguage", "Choose language")}>{languageLabels[language] || "አማ"}</button>
-          <button className="wc-avatar-button" type="button" onClick={() => setProfileOpen(true)} aria-label={t("raffle.ui.openProfile", "Open profile")}>
+          <button className="wc-avatar-button" type="button" onClick={openProfile} aria-label={t("raffle.ui.openProfile", "Open profile")}>
             {user?.photo ? <img src={user.photo} alt="" /> : <span>{initials || "U"}</span>}
           </button>
         </div>
@@ -101,6 +144,30 @@ function TournamentShell({ children, eyebrow, title, subtitle, actions }) {
             <div><span>{t("raffle.ui.ownedTickets", "Owned tickets")}</span><strong>{assigned.length}</strong></div>
             <div><span>{t("raffle.ui.chooseNumber", "Choose number")}</span><strong>{pending.length}</strong></div>
           </div>
+          <form className="profile-phone-form" onSubmit={savePhone}>
+            <label htmlFor="profile-phone">{t("raffle.ui.phoneLabel", "Your phone number")}</label>
+            <div className="profile-phone-row">
+              <input
+                id="profile-phone"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                required
+                value={phone}
+                onChange={(event) => {
+                  setPhone(event.target.value);
+                  setPhoneMessage("");
+                  setPhoneError("");
+                }}
+                placeholder="+251 9X XXX XXXX"
+              />
+              <button className="wc-button" type="submit" disabled={phoneSaving || !user?.telegramId}>
+                {phoneSaving ? t("raffle.ui.saving", "Saving...") : t("raffle.ui.savePhone", "Save phone")}
+              </button>
+            </div>
+            {phoneMessage && <p className="profile-phone-success" role="status">{phoneMessage}</p>}
+            {phoneError && <p className="profile-phone-error" role="alert">{phoneError}</p>}
+          </form>
           <div className="raffle-profile-list">
             {profileLoading && <div className="wc-empty">{t("raffle.ui.loadingTickets", "Loading tickets...")}</div>}
             {!profileLoading && !purchases.length && <div className="wc-empty">{t("raffle.ui.noProfileTickets", "You have not bought a raffle ticket yet.")}</div>}
