@@ -1,6 +1,10 @@
 import React from "react";
 import { mediaSrcSet, mediaUrl } from "./raffleApi";
 
+export function blurredImageStyle(path) {
+  return { "--item-image": `url(${JSON.stringify(mediaUrl(path))})` };
+}
+
 function ResponsiveImage({
   path,
   alt = "",
